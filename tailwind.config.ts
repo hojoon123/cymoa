@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        schoolsafe: ['SchoolSafe', 'sans-serif'], // 폰트 이름 추가
+      },
     },
   },
   plugins: [],
