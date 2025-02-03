@@ -15,14 +15,21 @@ interface ImageGalleryProps {
 }
 
 export default function ImageGallery({ orderedImages = [] }: ImageGalleryProps) {
-  // 훅들은 항상 호출합니다.
+  // 모든 Hook은 항상 최상위에서 호출합니다.
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
 
-  // orderedImages가 없거나 빈 배열이면 빈 컴포넌트를 렌더링
+  // Hook은 항상 호출한 후, 조건부로 렌더링 결과를 결정합니다.
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  // 만약 이미지가 없다면, JSX 내부에서 아무것도 렌더링하지 않도록 처리합니다.
   if (orderedImages.length === 0) {
     return null;
   }
@@ -32,13 +39,6 @@ export default function ImageGallery({ orderedImages = [] }: ImageGalleryProps) 
     if (!src) return '';
     return src.startsWith('/') ? src : `/${src}`;
   };
-
-  // 컴포넌트 언마운트 시 body overflow 복구
-  useEffect(() => {
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
