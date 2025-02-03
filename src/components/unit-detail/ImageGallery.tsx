@@ -11,19 +11,21 @@ interface OrderedImage {
 }
 
 interface ImageGalleryProps {
-  orderedImages: OrderedImage[]; // 서버에서 이미 순서 & alt를 붙여 내려줌
+  orderedImages?: OrderedImage[]; // 기본값으로 undefined 가능
 }
 
-export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
-  if (!orderedImages || orderedImages.length === 0) {
-    return null;
-  }
-
+export default function ImageGallery({ orderedImages = [] }: ImageGalleryProps) {
+  // 훅들은 항상 호출합니다.
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
+
+  // orderedImages가 없거나 빈 배열이면 빈 컴포넌트를 렌더링
+  if (orderedImages.length === 0) {
+    return null;
+  }
 
   // 이미지 경로가 "/"로 시작하지 않으면 자동으로 "/" 추가
   const fixSrc = (src: string) => {
@@ -31,7 +33,7 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
     return src.startsWith('/') ? src : `/${src}`;
   };
 
-  // 초기 & 언마운트 시
+  // 컴포넌트 언마운트 시 body overflow 복구
   useEffect(() => {
     return () => {
       document.body.style.overflow = 'auto';
@@ -52,13 +54,10 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
     if (!touchStart || !touchEnd) return;
 
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe && currentIndex < orderedImages.length - 1) {
+    if (distance > 50 && currentIndex < orderedImages.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     }
-    if (isRightSwipe && currentIndex > 0) {
+    if (distance < -50 && currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
     }
     setTouchStart(0);
@@ -73,7 +72,6 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
   const currentImg = orderedImages[currentIndex];
   const currentFixedSrc = fixSrc(currentImg.src);
 
-  // 전체화면 모드 컴포넌트
   const FullscreenGallery = () => {
     const fullFixedSrc = fixSrc(currentImg.src);
 
@@ -96,7 +94,7 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
           <Image
             src={fullFixedSrc}
             alt={currentImg.alt}
-            title={currentImg.alt} // 호버 시 툴팁
+            title={currentImg.alt}
             className={`w-full h-full object-contain transition-transform duration-300 ${
               isSwiping ? 'scale-95' : 'scale-100'
             }`}
@@ -146,7 +144,6 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
 
         {orderedImages.length > 1 && (
           <>
-            {/* 모바일 전용 좌우 버튼 */}
             <button
               onClick={() =>
                 setCurrentIndex((prev) =>
@@ -171,7 +168,6 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
         )}
       </div>
 
-      {/* 모바일 하단 인디케이터 */}
       {orderedImages.length > 1 && (
         <div className="flex justify-center md:hidden">
           <div className="flex gap-1.5">
@@ -187,7 +183,6 @@ export default function ImageGallery({ orderedImages }: ImageGalleryProps) {
         </div>
       )}
 
-      {/* 데스크톱 썸네일 */}
       {orderedImages.length > 1 && (
         <div className="hidden md:flex gap-2 overflow-x-auto pb-1 snap-x scrollbar-hide">
           {orderedImages.map((img, idx) => {

@@ -10,6 +10,7 @@ import {
 } from '@/utils/formatUtils';
 import { ArrowUpDown, MapPin, Package2, Ruler, Search } from 'lucide-react';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -161,9 +162,10 @@ export default async function ListingsPage(props: ListingsPageProps) {
                   <CardContent className="p-0">
                     <div className="relative">
                       {listing.images ? (
-                        <img
+                        <Image
                           src={listing.images}
                           alt={listing.complex_name}
+                          priority
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
                         />
                       ) : (

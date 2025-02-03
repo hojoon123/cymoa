@@ -10,6 +10,22 @@ import {
 import Script from 'next/script';
 import { useEffect } from 'react';
 
+// 예: src/types/kakao.d.ts
+export interface KakaoType {
+  isInitialized: () => boolean;
+  init: (key: string) => void;
+  Channel: {
+    addChannel: (options: { channelPublicId: string }) => void;
+  };
+}
+
+declare global {
+  interface Window {
+    Kakao?: KakaoType;
+  }
+}
+
+
 interface PropertyInfoProps {
   unitInfo: {
     area: string;             // ex) "21.39m² (6.5평)"
@@ -39,14 +55,12 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
 );
 
 export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
-  // 입주 대상자 처리: '기타'를 '공고 확인 필요'로 대체
+  // '기타'를 '공고 확인 필요'로 변경하고 중복 제거
   const processedResidents = unitInfo.residents.map((resident) =>
     resident === '기타' ? '공고 확인 필요' : resident
   );
-  // 중복 제거 (예: '기타'가 여러 번 포함된 경우)
   const uniqueResidents = Array.from(new Set(processedResidents));
 
-  // 정보 목록
   const infoItems = [
     { icon: HomeIcon, label: '전용면적', value: unitInfo.area },
     {
@@ -61,24 +75,18 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
     { icon: BuildingIcon, label: '공급 유형', value: unitInfo.type },
   ];
 
-  // 카카오 SDK 초기화 (클라이언트 사이드에서 한 번만 실행)
+  // Kakao SDK 초기화
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).Kakao) {
-      const Kakao = (window as any).Kakao;
-      if (!Kakao.isInitialized()) {
-        // NEXT_PUBLIC_KAKAO_KEY 환경변수에 앱 키를 넣어두세요.
-        Kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY);
+    if (typeof window !== 'undefined' && window.Kakao) {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY!);
       }
     }
   }, []);
 
-  // 카카오톡 플러스친구 추가 버튼 클릭 핸들러
   const handleKakaoPlusFriend = () => {
-    if (typeof window !== 'undefined' && (window as any).Kakao) {
-      const Kakao = (window as any).Kakao;
-      // 위 useEffect에서 초기화했으므로 바로 채널 추가 메서드를 호출합니다.
-      Kakao.Channel.addChannel({
-        // 채널의 public id (예: '_HKFKn')를 넣어주세요.
+    if (typeof window !== 'undefined' && window.Kakao) {
+      window.Kakao.Channel.addChannel({
         channelPublicId: '_HKFKn',
       });
     } else {
@@ -88,13 +96,11 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
 
   return (
     <section className="space-y-4">
-      {/* Kakao SDK 스크립트 로드 (클라이언트 사이드에서만 로드됨) */}
       <Script
         src="https://developers.kakao.com/sdk/js/kakao.min.js"
         strategy="afterInteractive"
       />
 
-      {/* 1) 상단 헤더 부분 */}
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-lg bg-blue-50">
           <BuildingIcon className="w-4 h-4 text-blue-600" />
@@ -104,7 +110,6 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
         </h2>
       </div>
 
-      {/* 2) 정보 박스 및 카카오톡 플러스친구 추가 버튼 */}
       <div className="rounded-lg border bg-white p-4">
         <div className="font-semibold">
           {infoItems.map((item) => (
@@ -116,7 +121,6 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
             onClick={handleKakaoPlusFriend}
             className="flex items-center justify-center gap-2 w-full py-3 rounded-md bg-[#FEE500] text-black font-semibold text-base"
           >
-            {/* 카카오톡 아이콘 (예시 SVG) */}
             <svg
               width="18"
               height="18"
