@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 export default function NavBar() {
@@ -13,9 +14,9 @@ export default function NavBar() {
     <header className="bg-white shadow-sm fixed top-0 w-full z-50">
       <nav className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
         {/* 로고 */}
-        <a href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <span className="text-2xl font-bold font-schoolsafe">청약백서</span>
-        </a>
+        </Link>
 
         {/* 햄버거 버튼 (모바일) */}
         <button
@@ -46,28 +47,28 @@ export default function NavBar() {
           }`}
         >
           <li>
-            <a
+            <Link
               href="/listings"
               className="block px-4 py-2 text-gray-600 hover:text-blue-600 lg:inline lg:px-0"
             >
               모집공고
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/calculator"
               className="block px-4 py-2 text-gray-600 hover:text-blue-600 lg:inline lg:px-0"
             >
               가점계산기
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/contact"
               className="block px-4 py-2 text-gray-600 hover:text-blue-600 lg:inline lg:px-0"
             >
               광고문의
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>

@@ -1,4 +1,3 @@
-// src/components/unit-detail/ImageGallery.tsx
 'use client';
 
 import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';

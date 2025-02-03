@@ -1,5 +1,3 @@
-// 파일: src/components/unit-detail/RentalOptions.tsx
-
 'use client';
 
 import { formatKoreanMoney } from '@/utils/formatUtils';
@@ -48,11 +46,9 @@ export default function RentalOptions({ contracts }: RentalOptionsProps) {
                   onClick={() => setActiveContract(contract)}
                   className={`
                     px-4 py-2 rounded-lg text-sm md:text-base transition-all duration-200
-                    ${
-                      isActive
-                        ? 'bg-blue-100 text-blue-600 border-2 border-blue-200 font-semibold'
-                        : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 font-medium'
-                    }
+                    ${isActive
+                      ? 'bg-blue-100 text-blue-600 border-2 border-blue-200 font-semibold'
+                      : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 font-medium'}
                   `}
                 >
                   {contract.group}

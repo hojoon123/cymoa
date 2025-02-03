@@ -1,5 +1,3 @@
-// 파일: src/service/api/fetchUnits.ts
-
 import { BASE_URL } from '@/utils/constants';
 
 export interface UnitsParams {
@@ -37,6 +35,25 @@ export interface UnitItem {
 export interface FetchUnitsResult {
   listings: UnitItem[];
   totalCount: number;
+}
+
+// Raw API 응답 데이터 타입 정의
+interface RawUnitItem {
+  id: number;
+  images?: string;
+  complex_name: string;
+  unit_type: string;
+  region: string;
+  house_types: string;
+  eligible_residents: string[];
+  exclusive_area_m2: string;
+  exclusive_area_pyeong: string;
+  deposit_min: number;
+  deposit_max: number;
+  rent_min: number;
+  rent_max: number;
+  general_supply_date_start: string | null;
+  general_supply_date_end: string | null;
 }
 
 export async function fetchUnits(params: UnitsParams): Promise<FetchUnitsResult> {
@@ -99,10 +116,10 @@ export async function fetchUnits(params: UnitsParams): Promise<FetchUnitsResult>
   }
 
   const drfData = await res.json();
-  const results = drfData.results || drfData;
+  const results: RawUnitItem[] = drfData.results || drfData;
 
   // 응답 데이터 매핑
-  const listings: UnitItem[] = results.map((item: any) => ({
+  const listings: UnitItem[] = results.map((item) => ({
     id: item.id,
     images: item.images || '',
     complex_name: item.complex_name,

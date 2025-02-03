@@ -1,4 +1,3 @@
-// src/components/unit-detail/PropertyInfo.tsx
 'use client';
 
 import {
@@ -21,15 +20,13 @@ interface PropertyInfoProps {
   };
 }
 
-const InfoItem = ({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: any;
+interface InfoItemProps {
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string;
-}) => (
+}
+
+const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
   <div className="flex items-start gap-3 py-3 border-b last:border-none">
     <div className="p-1.5 rounded-lg bg-gray-50">
       <Icon className="w-4 h-4 text-gray-900" />
