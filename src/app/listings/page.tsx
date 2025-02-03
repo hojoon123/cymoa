@@ -18,72 +18,70 @@ export const metadata: Metadata = {
   description: '서버 사이드 페이지네이션 & 한 번에 조회하기 버튼'
 }
 
-// 기존에 없던 부분: status, residents 추가
-type ListingsPageProps = {
-  searchParams: {
-    page?: string
-    region?: string | string[]
-    deposit_min?: string
-    deposit_max?: string
-    rent_min?: string
-    rent_max?: string
-    houseTypes?: string | string[]
-    sizes?: string | string[]
+type CustomSearchParams = {
+  page?: string;
+  region?: string | string[];
+  deposit_min?: string;
+  deposit_max?: string;
+  rent_min?: string;
+  rent_max?: string;
+  houseTypes?: string | string[];
+  sizes?: string | string[];
+  status?: string;
+  residents?: string | string[];
+};
 
-    // 새로 추가
-    status?: string
-    residents?: string | string[]
-  }
-}
+// Next.js 내부 타입 검사와 맞추기 위해 searchParams를 Promise 타입으로 지정
+type ListingsPageProps = {
+  searchParams: Promise<CustomSearchParams>;
+};
 
 export default async function ListingsPage(props: ListingsPageProps) {
-  const searchParams = await props.searchParams
+  const searchParams = await props.searchParams;
 
   // 페이지 파라미터
-  const pageParam = searchParams.page ? parseInt(searchParams.page, 10) : 1
+  const pageParam = searchParams.page ? parseInt(searchParams.page, 10) : 1;
 
   // 지역
-  let selectedRegions: string[] = []
+  let selectedRegions: string[] = [];
   if (searchParams.region) {
     selectedRegions = Array.isArray(searchParams.region)
       ? searchParams.region
-      : [searchParams.region]
+      : [searchParams.region];
   }
 
   // 주택유형
-  let selectedHouseTypes: string[] = []
+  let selectedHouseTypes: string[] = [];
   if (searchParams.houseTypes) {
     selectedHouseTypes = Array.isArray(searchParams.houseTypes)
       ? searchParams.houseTypes
-      : [searchParams.houseTypes]
+      : [searchParams.houseTypes];
   }
 
   // 평수
-  let selectedSizes: string[] = []
+  let selectedSizes: string[] = [];
   if (searchParams.sizes) {
     selectedSizes = Array.isArray(searchParams.sizes)
       ? searchParams.sizes
-      : [searchParams.sizes]
+      : [searchParams.sizes];
   }
 
   // 보증금/월세
-  const deposit_min = searchParams.deposit_min || ''
-  const deposit_max = searchParams.deposit_max || ''
-  const rent_min = searchParams.rent_min || ''
-  const rent_max = searchParams.rent_max || ''
+  const deposit_min = searchParams.deposit_min || '';
+  const deposit_max = searchParams.deposit_max || '';
+  const rent_min = searchParams.rent_min || '';
+  const rent_max = searchParams.rent_max || '';
 
   // ✨ (추가) 공고상태(status)
-  const status = searchParams.status || ''
+  const status = searchParams.status || '';
 
   // ✨ (추가) 입주대상자(residents)
-  let selectedResidents: string[] = []
+  let selectedResidents: string[] = [];
   if (searchParams.residents) {
-    // "청년(소득X),고령자" 같은 CSV 형태라면 split
     if (Array.isArray(searchParams.residents)) {
-      // 혹시 배열 형태로 들어온다면(가능성 낮지만), 배열 그대로 사용
-      selectedResidents = searchParams.residents
+      selectedResidents = searchParams.residents;
     } else {
-      selectedResidents = searchParams.residents.split(',')
+      selectedResidents = searchParams.residents.split(',');
     }
   }
 
@@ -93,30 +91,25 @@ export default async function ListingsPage(props: ListingsPageProps) {
   const data = await fetchUnits({
     page: pageParam,
     itemsPerPage: 8,
-
     regions: selectedRegions,
     houseTypes: selectedHouseTypes,
     sizes: selectedSizes,
-
     deposit_min,
     deposit_max,
     rent_min,
     rent_max,
-
-    // 추가한 것들
     status,
     residents: selectedResidents
-  })
+  });
 
-  const { listings, totalCount } = data
+  const { listings, totalCount } = data;
 
-  // 이하 렌더링 로직은 동일
   const houseTypeColors: Record<string, string> = {
     '행복주택': 'bg-rose-500',
     '국민임대': 'bg-violet-500',
     '공공임대': 'bg-emerald-500',
     '전세임대': 'bg-amber-500'
-  }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -151,8 +144,8 @@ export default async function ListingsPage(props: ListingsPageProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {listings.map((listing) => {
-            const typeColor = houseTypeColors[listing.house_types] || 'bg-blue-500'
-            const displayTitle = `${listing.complex_name} ${listing.unit_type}` 
+            const typeColor = houseTypeColors[listing.house_types] || 'bg-blue-500';
+            const displayTitle = `${listing.complex_name} ${listing.unit_type}`;
             return (
               <Card
                 key={listing.id}
