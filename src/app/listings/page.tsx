@@ -1,50 +1,47 @@
 // 파일: src/app/listings/page.tsx
-import FilterSection from '@/components/listingpage/FilterSection'
-import PaginationBar from '@/components/listingpage/PaginationBar'
-import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { fetchListings } from '@/service/api/fetchListings'
+import FilterSection from '@/components/listingpage/FilterSection';
+import PaginationBar from '@/components/listingpage/PaginationBar';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { fetchUnits } from '@/service/api/fetchUnits';
 import {
-    formatKoreanMoney,
-    formatSizeKR
-} from '@/utils/formatUtils'
-import { ArrowUpDown, MapPin, Package2, Search } from 'lucide-react'
-import { Metadata } from 'next'
-import Link from 'next/link'
+  formatKoreanMoney,
+  formatSizeKR
+} from '@/utils/formatUtils';
+import { ArrowUpDown, MapPin, Package2, Ruler, Search } from 'lucide-react';
+import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '청약 모집공고 - SSR 단일 조회 예시',
   description: '서버 사이드 페이지네이션 & 한 번에 조회하기 버튼'
 }
 
-// 주택유형 별 색상
-const houseTypeColors: Record<string, string> = {
-  '행복주택': 'bg-rose-500',
-  '국민임대': 'bg-violet-500',
-  '공공임대': 'bg-emerald-500',
-  '전세임대': 'bg-amber-500'
-}
-
+// 기존에 없던 부분: status, residents 추가
 type ListingsPageProps = {
   searchParams: {
     page?: string
     region?: string | string[]
-    deposit?: string
-    monthly?: string
+    deposit_min?: string
+    deposit_max?: string
+    rent_min?: string
+    rent_max?: string
     houseTypes?: string | string[]
     sizes?: string | string[]
+
+    // 새로 추가
+    status?: string
+    residents?: string | string[]
   }
 }
 
 export default async function ListingsPage(props: ListingsPageProps) {
-  // ❶ 꼭 await 를 통해 가져오기
   const searchParams = await props.searchParams
 
-  // ❷ 이후부턴 기존 코드 동일
+  // 페이지 파라미터
   const pageParam = searchParams.page ? parseInt(searchParams.page, 10) : 1
-  const depositSort = searchParams.deposit || ''
-  const monthlySort = searchParams.monthly || ''
 
+  // 지역
   let selectedRegions: string[] = []
   if (searchParams.region) {
     selectedRegions = Array.isArray(searchParams.region)
@@ -52,6 +49,7 @@ export default async function ListingsPage(props: ListingsPageProps) {
       : [searchParams.region]
   }
 
+  // 주택유형
   let selectedHouseTypes: string[] = []
   if (searchParams.houseTypes) {
     selectedHouseTypes = Array.isArray(searchParams.houseTypes)
@@ -59,6 +57,7 @@ export default async function ListingsPage(props: ListingsPageProps) {
       : [searchParams.houseTypes]
   }
 
+  // 평수
   let selectedSizes: string[] = []
   if (searchParams.sizes) {
     selectedSizes = Array.isArray(searchParams.sizes)
@@ -66,19 +65,58 @@ export default async function ListingsPage(props: ListingsPageProps) {
       : [searchParams.sizes]
   }
 
-  // 2) 서버 사이드에서 호출
-  const data = await fetchListings({
+  // 보증금/월세
+  const deposit_min = searchParams.deposit_min || ''
+  const deposit_max = searchParams.deposit_max || ''
+  const rent_min = searchParams.rent_min || ''
+  const rent_max = searchParams.rent_max || ''
+
+  // ✨ (추가) 공고상태(status)
+  const status = searchParams.status || ''
+
+  // ✨ (추가) 입주대상자(residents)
+  let selectedResidents: string[] = []
+  if (searchParams.residents) {
+    // "청년(소득X),고령자" 같은 CSV 형태라면 split
+    if (Array.isArray(searchParams.residents)) {
+      // 혹시 배열 형태로 들어온다면(가능성 낮지만), 배열 그대로 사용
+      selectedResidents = searchParams.residents
+    } else {
+      selectedResidents = searchParams.residents.split(',')
+    }
+  }
+
+  // -------------------------------------------
+  // fetchUnits 호출 시 함께 넘김
+  // -------------------------------------------
+  const data = await fetchUnits({
     page: pageParam,
     itemsPerPage: 8,
-    depositSort,
-    monthlySort,
+
     regions: selectedRegions,
     houseTypes: selectedHouseTypes,
-    sizes: selectedSizes
+    sizes: selectedSizes,
+
+    deposit_min,
+    deposit_max,
+    rent_min,
+    rent_max,
+
+    // 추가한 것들
+    status,
+    residents: selectedResidents
   })
+
   const { listings, totalCount } = data
 
-  // 3) SSR로 렌더링
+  // 이하 렌더링 로직은 동일
+  const houseTypeColors: Record<string, string> = {
+    '행복주택': 'bg-rose-500',
+    '국민임대': 'bg-violet-500',
+    '공공임대': 'bg-emerald-500',
+    '전세임대': 'bg-amber-500'
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -88,14 +126,12 @@ export default async function ListingsPage(props: ListingsPageProps) {
           <p className="text-gray-600 font-medium">전국의 청약 모집 공고를 확인해보세요 🤫</p>
         </div>
 
-        {/* 필터 박스 (Card) + (CardContent) => 박스 형태 유지 */}
         <Card className="mb-8 border border-gray-200">
           <CardContent className="p-6">
             <FilterSection />
           </CardContent>
         </Card>
 
-        {/* 결과 컨트롤 섹션 */}
         <div className="flex justify-between items-center mb-6">
           <p className="text-sm font-semibold text-gray-600">
             총 {totalCount}건의 공고
@@ -112,10 +148,10 @@ export default async function ListingsPage(props: ListingsPageProps) {
           </div>
         </div>
 
-        {/* 공고 목록 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {listings.map((listing) => {
-            const typeColor = houseTypeColors[listing.type] || 'bg-blue-500'
+            const typeColor = houseTypeColors[listing.house_types] || 'bg-blue-500'
+            const displayTitle = `${listing.complex_name} ${listing.unit_type}` 
             return (
               <Card
                 key={listing.id}
@@ -124,10 +160,10 @@ export default async function ListingsPage(props: ListingsPageProps) {
                 <Link href={`/listings/${listing.id}`}>
                   <CardContent className="p-0">
                     <div className="relative">
-                      {listing.thumbnail ? (
+                      {listing.images ? (
                         <img
-                          src={listing.thumbnail}
-                          alt={listing.title}
+                          src={listing.images}
+                          alt={listing.complex_name}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
                         />
                       ) : (
@@ -136,33 +172,39 @@ export default async function ListingsPage(props: ListingsPageProps) {
                         </div>
                       )}
                       <span className={`absolute top-4 right-4 px-3 py-1 text-white text-sm rounded-lg shadow-lg ${typeColor}`}>
-                        {listing.type}
+                        {listing.house_types}
                       </span>
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">
-                        {listing.title}
+                        {displayTitle}
                       </h3>
                       <div className="space-y-2">
                         <p className="text-gray-600 flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-gray-400" />
-                          {listing.location}
+                          <Ruler className="w-4 h-4 text-gray-400" />
+                          {formatSizeKR(listing.exclusive_area_pyeong)} ({listing.exclusive_area_m2}m²)
                         </p>
                         <p className="text-gray-600 flex items-center gap-2">
                           <Package2 className="w-4 h-4 text-gray-400" />
-                          {formatKoreanMoney(listing.deposit)}
+                          {formatKoreanMoney(listing.deposit_min)} ~ {formatKoreanMoney(listing.deposit_max)}
                         </p>
                         <p className="text-gray-600 flex items-center gap-2">
                           <ArrowUpDown className="w-4 h-4 text-gray-400" />
-                          {formatKoreanMoney(listing.rent)}
+                          {formatKoreanMoney(listing.rent_min)} ~ {formatKoreanMoney(listing.rent_max)}
+                        </p>
+                        <p className="text-gray-600 flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-gray-400" />
+                          {listing.region}
                         </p>
                         <div className="flex items-center gap-2 text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100">
-                          <span className="px-2 py-1 bg-gray-50 rounded-lg border border-gray-200">
-                          {formatSizeKR(listing.size)}
+                          <span className="px-2 py-1 bg-white-500 rounded-lg border border-gray-200">
+                            📅 신청 기간
                           </span>
-                          <span className="px-2 py-1 bg-gray-50 rounded-lg border border-gray-200">
-                            {listing.period}
-                          </span>
+                          {listing.general_supply_date_start && listing.general_supply_date_end && (
+                            <span className="px-1 py-1 bg-gray-50 rounded-lg border border-gray-200">
+                              {listing.general_supply_date_start} ~ {listing.general_supply_date_end}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -173,7 +215,6 @@ export default async function ListingsPage(props: ListingsPageProps) {
           })}
         </div>
 
-        {/* 페이지네이션 */}
         <PaginationBar
           currentPage={pageParam}
           totalCount={totalCount}
