@@ -1,26 +1,21 @@
+// 파일: src/service/api/fetchUnitDetail.ts
+
+import { BASE_URL } from '@/utils/constants'; // alias나 경로는 프로젝트 설정에 맞게 조정
+
 export async function fetchUnitDetail(unitId: string | number) {
-    let baseURL = process.env.NEXT_PUBLIC_API_BASE || '';
-    
-    // baseURL이 빈 문자열이면, 로컬 호스트로 fallback:
-    if (!baseURL) {
-      baseURL = 'http://127.0.0.1:8000';
-    }
-  
-    // 혹은, new URL()을 사용해 유효성 체크:
-    let finalUrl: string;
-    try {
-      finalUrl = new URL(`/api/units/${unitId}/`, baseURL).toString();
-    } catch (err) {
-      // 만약 baseURL이 "http//127.0.0.1:8000" (콜론 누락) 같은 형식이면 여기서 에러
-      console.error('Invalid baseURL:', baseURL, err);
-      // fallback 처리
-      finalUrl = `http://127.0.0.1:8000/api/units/${unitId}/`;
-    }
-  
-    const res = await fetch(finalUrl, { cache: 'no-store' });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch unit detail: ${res.status}`);
-    }
-    return await res.json();
+  // BASE_URL을 직접 사용하여 URL 생성
+  let finalUrl: string;
+  try {
+    finalUrl = new URL(`/api/units/${unitId}/`, BASE_URL).toString();
+  } catch (err) {
+    console.error('Invalid BASE_URL:', BASE_URL, err);
+    // 필요 시 fallback URL 처리 (예: 로컬 호스트)
+    finalUrl = `http://127.0.0.1:8000/api/units/${unitId}/`;
   }
-  
+
+  const res = await fetch(finalUrl, { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch unit detail: ${res.status}`);
+  }
+  return await res.json();
+}
