@@ -10,7 +10,6 @@ import {
 import Script from 'next/script';
 import { useEffect } from 'react';
 
-// 예: src/types/kakao.d.ts
 export interface KakaoType {
   isInitialized: () => boolean;
   init: (key: string) => void;
