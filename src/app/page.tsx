@@ -20,12 +20,12 @@ export default function HomePage() {
           {/* 로고 섹션 (SSR로 렌더링) */}
           <div className="flex items-center gap-3 mb-2">
           <Image
-                src="/cymoa/assets/Logo11.png"
-                alt="청약 로고"
-                width={240}
-                height={240}
-                className="object-contain -translate-x-1 -translate-y-8"
-              />
+            src="/cymoa/assets/Logo11.png"
+            alt="청약 로고"
+            width={240}
+            height={240}
+            className="object-contain max-w-[240px] w-auto h-auto sm:max-w-[200px] md:max-w-[240px] -translate-x-1 -translate-y-8"
+          />
           </div>
 
           {/* 검색 컴포넌트 (CSR) */}

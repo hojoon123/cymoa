@@ -21,7 +21,7 @@ export default function RootLayout({
         <header className="bg-white shadow-sm">
           <nav className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <span className="text-3xl font-bold font-schoolsafe">🍀청약백서</span>
+              <span className="text-2xl font-bold font-schoolsafe md:text-3xl">🍀청약백서</span>
             </Link>
             <ul className="flex space-x-4">
               <li>

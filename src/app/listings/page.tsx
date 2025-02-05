@@ -8,7 +8,7 @@ import {
   formatKoreanMoney,
   formatSizeKR
 } from '@/utils/formatUtils';
-import { ArrowUpDown, MapPin, Package2, Ruler, Search } from 'lucide-react';
+import { Coins, DollarSign, MapPin, Ruler, Search } from 'lucide-react';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -120,8 +120,8 @@ export default async function ListingsPage(props: ListingsPageProps) {
           <p className="text-gray-600 font-medium">전국의 청약 모집 공고를 확인해보세요 🤫</p>
         </div>
 
-        <Card className="mb-8 border border-gray-200">
-          <CardContent className="p-6">
+        <Card className="mb-8 border-0 md:border md:border-gray-200">
+          <CardContent className="p-6 bg-gray-50 md:bg-transparent">
             <FilterSection />
           </CardContent>
         </Card>
@@ -154,18 +154,20 @@ export default async function ListingsPage(props: ListingsPageProps) {
                 <Link href={`/listings/${listing.id}`}>
                   <CardContent className="p-0">
                     <div className="relative">
-                      {listing.images ? (
+                        {listing.images ? (
                         <Image
-                          src={listing.images}
+                          src={`/${listing.images}`}
                           alt={listing.complex_name}
+                          width={600}
+                          height={400}
                           priority
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
                         />
-                      ) : (
+                        ) : (
                         <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
                           이미지 없음
                         </div>
-                      )}
+                        )}
                       <span className={`absolute top-4 right-4 px-3 py-1 text-white text-sm rounded-lg shadow-lg ${typeColor}`}>
                         {listing.house_types}
                       </span>
@@ -177,18 +179,22 @@ export default async function ListingsPage(props: ListingsPageProps) {
                       <div className="space-y-2">
                         <p className="text-gray-600 flex items-center gap-2">
                           <Ruler className="w-4 h-4 text-gray-400" />
+                          <span className="font-semibold text-sm">넓이:</span>
                           {formatSizeKR(listing.exclusive_area_pyeong)} ({listing.exclusive_area_m2}m²)
                         </p>
                         <p className="text-gray-600 flex items-center gap-2">
-                          <Package2 className="w-4 h-4 text-gray-400" />
+                          <DollarSign className="w-4 h-4 text-gray-400" />
+                          <span className="font-semibold text-sm">보증금:</span>
                           {formatKoreanMoney(listing.deposit_min)} ~ {formatKoreanMoney(listing.deposit_max)}
                         </p>
                         <p className="text-gray-600 flex items-center gap-2">
-                          <ArrowUpDown className="w-4 h-4 text-gray-400" />
+                          <Coins className="w-4 h-4 text-gray-400" />
+                          <span className="font-semibold text-sm">월세:</span>
                           {formatKoreanMoney(listing.rent_min)} ~ {formatKoreanMoney(listing.rent_max)}
                         </p>
                         <p className="text-gray-600 flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-gray-400" />
+                          <span className="font-semibold text-sm">지역:</span>
                           {listing.region}
                         </p>
                         <div className="flex items-center gap-2 text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100">

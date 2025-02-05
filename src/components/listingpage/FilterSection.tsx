@@ -167,8 +167,8 @@ export default function FilterSection() {
     }
   }
 
-  return (
-    <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+  return ( // bg-gray-50 p-6 rounded-lg shadow-md
+    <div className="p-4 bg-transparent md:p-6 md:rounded-lg md:shadow-md md:bg-gray-50">
       {/* ───────────────────────────────────────────────── */}
       {/* 지역 선택 섹션 */}
       {/* ───────────────────────────────────────────────── */}
@@ -227,47 +227,13 @@ export default function FilterSection() {
             </div>
             <div className="px-3 py-6">
               <Slider
+                className="h-2"
                 min={0}
                 max={10000}
                 step={100}
                 value={deposit}
                 defaultValue={[0, 10000]}
                 onValueChange={(value: [number, number]) => setDeposit(value)}
-              />
-            </div>
-            <div className="flex justify-between items-center mt-4">
-              <input
-                type="number"
-                value={deposit[0]}
-                onChange={(e) => {
-                  let val = Number(e.target.value);
-                  if (val < 0) val = 0;
-                  if (val > 10000) val = 10000;
-                  setDeposit([Math.min(val, deposit[1]), deposit[1]])
-                }}
-                onKeyDown={preventInvalidKeys}
-                className="w-28 px-3 py-2 text-sm border border-gray-300 rounded-md 
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                  hover:border-gray-400 transition-colors"
-                min={0}
-                max={10000}
-              />
-              <span className="text-gray-400 mx-2">~</span>
-              <input
-                type="number"
-                value={deposit[1]}
-                onChange={(e) => {
-                  let val = Number(e.target.value);
-                  if (val < 0) val = 0;
-                  if (val > 10000) val = 10000;
-                  setDeposit([deposit[0], Math.max(val, deposit[0])])
-                }}
-                onKeyDown={preventInvalidKeys}
-                className="w-28 px-3 py-2 text-sm border border-gray-300 rounded-md 
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                  hover:border-gray-400 transition-colors"
-                min={0}
-                max={10000}
               />
             </div>
           </div>
@@ -291,41 +257,6 @@ export default function FilterSection() {
                 value={rent}
                 defaultValue={[0, 100]}
                 onValueChange={(value: [number, number]) => setRent(value)}
-              />
-            </div>
-            <div className="flex justify-between items-center mt-4">
-              <input
-                type="number"
-                value={rent[0]}
-                onChange={(e) => {
-                  let val = Number(e.target.value);
-                  if (val < 0) val = 0;
-                  if (val > 100) val = 100;
-                  setRent([Math.min(val, rent[1]), rent[1]])
-                }}
-                onKeyDown={preventInvalidKeys}
-                className="w-28 px-3 py-2 text-sm border border-gray-300 rounded-md 
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                  hover:border-gray-400 transition-colors"
-                min={0}
-                max={100}
-              />
-              <span className="text-gray-400 mx-2">~</span>
-              <input
-                type="number"
-                value={rent[1]}
-                onChange={(e) => {
-                  let val = Number(e.target.value);
-                  if (val < 0) val = 0;
-                  if (val > 100) val = 100;
-                  setRent([rent[0], Math.max(val, rent[0])])
-                }}
-                onKeyDown={preventInvalidKeys}
-                className="w-28 px-3 py-2 text-sm border border-gray-300 rounded-md 
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                  hover:border-gray-400 transition-colors"
-                min={0}
-                max={100}
               />
             </div>
           </div>
