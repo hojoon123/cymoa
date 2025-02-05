@@ -21,19 +21,16 @@ export function ScheduleInfo({ schedule }: ScheduleInfoProps) {
   // 원하는 항목만 골라 라벨 붙이기
   const scheduleItems = [
     {
-      color: 'blue',
       label: '공고일',
       value: schedule.announcement_date || '미정',
     },
     {
-      color: 'green',
-      label: '일반공급',
+      label: '신청 기간',
       value: schedule.application_period_start && schedule.application_period_end
         ? `${schedule.application_period_start} ~ ${schedule.application_period_end}`
         : '미정',
     },
     {
-      color: 'purple',
       label: '당첨자 발표',
       value: schedule.winner_announcement_date || '미정',
     }
@@ -52,12 +49,9 @@ export function ScheduleInfo({ schedule }: ScheduleInfoProps) {
         {scheduleItems.map((item) => (
           <div key={item.label} className="space-y-1.5">
             <h3 className="flex items-center gap-2 text-base font-medium text-gray-500">
-              <span
-                className={`inline-block w-3 h-3 rounded-full bg-${item.color}-500`}
-              />
               {item.label}
             </h3>
-            <p className="text-xl md:text-lg text-gray-900 pl-5">
+            <p className="text-xl md:text-lg text-gray-900">
               {item.value}
             </p>
           </div>

@@ -28,7 +28,7 @@ export default function UnitDetailPage({ params }: UnitDetailPageProps) {
 
   // 주택정보
   const unitInfo = {
-    area: `${data.exclusive_area_m2}m² (${formatSizeKR(data.exclusive_area_pyeong)})`,
+    area: `${formatSizeKR(data.exclusive_area_pyeong)} (${data.exclusive_area_m2}m²)`,
     residents: data.eligible_residents,
     period: data.default_residence_period,
     supply: data.current_supply,

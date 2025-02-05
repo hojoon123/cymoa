@@ -18,7 +18,7 @@ export default function HomePage() {
       <div className="max-w-3xl mx-auto px-4">
         <div className="h-screen flex flex-col items-center justify-center -mt-32">
           {/* 로고 섹션 (SSR로 렌더링) */}
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-3 mb-2 mt-8 md:mt-0">
           <Image
             src="/cymoa/assets/Logo11.png"
             alt="청약 로고"
