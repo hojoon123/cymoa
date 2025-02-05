@@ -40,9 +40,9 @@ export function ScheduleInfo({ schedule }: ScheduleInfoProps) {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-lg bg-yellow-50">
-          <Calendar className="w-4 h-4 text-yellow-600" />
+          <Calendar className="w-6 h-6 text-yellow-600" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">공고 일정</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">공고 일정</h2>
       </div>
 
       <div className="grid gap-4 rounded-lg border p-4">

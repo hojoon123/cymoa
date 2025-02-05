@@ -1,7 +1,6 @@
 'use client';
 
-import { formatKoreanMoney } from '@/utils/formatUtils';
-import { Building2, Wallet } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 import { useState } from 'react';
 import DepositCalculator from './DepositCalculator';
 
@@ -19,12 +18,30 @@ interface RentalOptionsProps {
 }
 
 export default function RentalOptions({ contracts = [] }: RentalOptionsProps) {
-  // 훅은 항상 호출합니다.
+  // 계약 탭 관련 상태
   const [activeContract, setActiveContract] = useState<Contract | undefined>(
     contracts.length > 0 ? contracts[0] : undefined
   );
 
-  // contracts 또는 activeContract가 없으면 빈 컴포넌트를 렌더링
+  // 각 계약(group)마다 슬라이더 값을 저장하는 객체
+  const [sliderMap, setSliderMap] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    contracts.forEach((contract) => {
+      initial[contract.group] = Math.floor(contract.deposit_min);
+    });
+    return initial;
+  });
+
+  // 현재 활성 탭의 슬라이더 값 업데이트
+  const handleSliderChange = (value: number) => {
+    if (activeContract) {
+      setSliderMap((prev) => ({
+        ...prev,
+        [activeContract.group]: value,
+      }));
+    }
+  };
+
   if (contracts.length === 0 || !activeContract) {
     return null;
   }
@@ -33,105 +50,47 @@ export default function RentalOptions({ contracts = [] }: RentalOptionsProps) {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-lg bg-gray-50">
-          <Wallet className="w-4 h-4 text-gray-900" />
+          <Wallet className="w-6 h-6 text-gray-900" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">임대 조건</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">임대 조건</h2>
       </div>
 
-      <div className="bg-white p-2 rounded-lg border">
-        <div className="bg-gray-100 rounded-lg p-2">
-          <div className="flex flex-wrap gap-2">
-            {contracts.map((contract) => {
-              const isActive = activeContract.group === contract.group;
-              return (
-                <button
-                  key={contract.group}
-                  onClick={() => setActiveContract(contract)}
-                  className={`px-4 py-2 rounded-lg text-sm md:text-base transition-all duration-200 ${
-                    isActive
-                      ? 'bg-blue-100 text-blue-600 border-2 border-blue-200 font-semibold'
-                      : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 font-medium'
-                  }`}
-                >
-                  {contract.group}
-                </button>
-              );
-            })}
-          </div>
+      {/* 탭과 내용이 통합된 카드 */}
+      <div className="bg-white border rounded-lg shadow-sm">
+        {/* 탭 헤더 */}
+        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 p-2 sm:flex sm:overflow-x-auto sm:gap-2">
+          {contracts.map((contract) => {
+            const isActive = activeContract.group === contract.group;
+            return (
+              <button
+                key={contract.group}
+                onClick={() => setActiveContract(contract)}
+                className={`px-4 py-2 transition-all duration-200 ${
+                  isActive
+                    ? 'font-semibold text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {contract.group}
+              </button>
+            );
+          })}
         </div>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="rounded-lg border bg-white p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="p-1.5 rounded-lg bg-gray-50">
-              <Building2 className="w-4 h-4 text-gray-900" />
-            </div>
-            <h3 className="text-xl md:text-2xl font-semibold text-gray-900">
-              최대 보증금 옵션
-            </h3>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <p className="text-base font-medium text-gray-500 mb-0.5">보증금</p>
-              <p className="text-xl md:text-2xl font-semibold text-gray-900">
-                {formatKoreanMoney(activeContract.deposit_max)}
-              </p>
-            </div>
-            <div>
-              <p className="text-base font-medium text-gray-500 mb-0.5">월세</p>
-              <p className="text-xl md:text-2xl font-semibold text-gray-900">
-                {formatKoreanMoney(activeContract.monthly_rent_max)}
-              </p>
-            </div>
-            <div className="pt-2 border-t">
-              <p className="text-base font-medium text-gray-500 mb-0.5">계약금</p>
-              <p className="text-xl md:text-2xl font-semibold text-gray-900">
-                {formatKoreanMoney(activeContract.down_payment)}
-              </p>
-            </div>
-          </div>
+        {/* DepositCalculator 내용 영역 */}
+        <div className="p-4 mt-4">
+          <DepositCalculator
+            depositMin={activeContract.deposit_min}
+            depositMax={activeContract.deposit_max}
+            rentMin={activeContract.monthly_rent_min}
+            rentMax={activeContract.monthly_rent_max}
+            downPayment={activeContract.down_payment}
+            // 각 탭별 저장된 슬라이더 값 전달 (없으면 depositMin의 floor값)
+            sliderValue={
+              sliderMap[activeContract.group] ?? Math.floor(activeContract.deposit_min)
+            }
+            onSliderChange={handleSliderChange}
+          />
         </div>
-
-        <div className="rounded-lg border bg-white p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="p-1.5 rounded-lg bg-gray-50">
-              <Building2 className="w-4 h-4 text-gray-900" />
-            </div>
-            <h3 className="text-xl md:text-2xl font-semibold text-gray-900">
-              최소 보증금 옵션
-            </h3>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <p className="text-base font-medium text-gray-500 mb-0.5">보증금</p>
-              <p className="text-xl md:text-2xl font-semibold text-gray-900">
-                {formatKoreanMoney(activeContract.deposit_min)}
-              </p>
-            </div>
-            <div>
-              <p className="text-base font-medium text-gray-500 mb-0.5">월세</p>
-              <p className="text-xl md:text-2xl font-semibold text-gray-900">
-                {formatKoreanMoney(activeContract.monthly_rent_min)}
-              </p>
-            </div>
-            <div className="pt-2 border-t">
-              <p className="text-base font-medium text-gray-500 mb-0.5">계약금</p>
-              <p className="text-xl md:text-2xl font-semibold text-gray-900">
-                {formatKoreanMoney(activeContract.down_payment)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-lg border bg-white p-4">
-        <DepositCalculator
-          depositMin={activeContract.deposit_min}
-          depositMax={activeContract.deposit_max}
-          rentMin={activeContract.monthly_rent_min}
-          rentMax={activeContract.monthly_rent_max}
-        />
       </div>
     </section>
   );

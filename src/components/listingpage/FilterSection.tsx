@@ -219,7 +219,7 @@ export default function FilterSection() {
               <span>{deposit[0].toLocaleString()}만원</span>
               <span>{deposit[1].toLocaleString()}만원</span>
             </div>
-            <div className="px-3 py-6">
+            <div className="px-1 py-2 md:py-6">
               <Slider
                 className="h-2"
                 min={0}
@@ -243,7 +243,7 @@ export default function FilterSection() {
               <span>{rent[0].toLocaleString()}만원</span>
               <span>{rent[1].toLocaleString()}만원</span>
             </div>
-            <div className="px-3 py-6">
+            <div className="px-1 py-2 md:py-6">
               <Slider
                 min={0}
                 max={100}

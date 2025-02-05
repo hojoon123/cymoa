@@ -28,9 +28,9 @@ export default function ReceptionInfo({ info }: ReceptionInfoProps) {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-lg bg-blue-50">
-          <Building2 className="w-4 h-4 text-blue-600" />
+          <Building2 className="w-6 h-6 text-blue-600" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">접수 정보</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">접수 정보</h2>
       </div>
 
       <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-2">

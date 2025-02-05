@@ -102,9 +102,9 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
 
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-lg bg-blue-50">
-          <BuildingIcon className="w-4 h-4 text-blue-600" />
+          <BuildingIcon className="w-6 h-6 text-blue-600" />
         </div>
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
           주택 정보
         </h2>
       </div>
@@ -132,7 +132,7 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
                 fill="#3B1E1E"
               />
             </svg>
-            플러스친구 추가하고 신청 방법 알아보기
+            플러스친구 추가하고 알람받기
           </button>
         </div>
       </div>
