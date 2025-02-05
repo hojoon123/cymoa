@@ -107,14 +107,14 @@ export default function InputBar() {
   }
 
   return (
-    <div className="w-full max-w-2xl relative mb-10">
+    <div className="w-full max-w-2xl relative md:mb-10">
       <input
         type="text"
         value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder="지역을 검색해보세요 (예: 서울, 경기, 인천 등)"
-        className="w-full px-6 py-4 rounded-full border border-gray-200
+        className="w-full px-6 py-4 rounded-full border border-gray-200 text-black
                    focus:outline-none focus:ring-2 focus:ring-blue-500
                    shadow-lg text-lg pr-14"
       />
@@ -122,20 +122,20 @@ export default function InputBar() {
       <button
         onClick={() => handleSearch(inputValue)}
         className="absolute top-1/4 right-4 -translate-y-1/2 
-                   flex items-center justify-center w-10 h-10 
-                   rounded-full hover:bg-gray-100 transition-colors"
+                   flex justify-center w-10 h-10 rounded-full
+                   hover:bg-gray-100 transition-colors md:items-center"
       >
         <Search className="w-6 h-6 text-blue-500" />
       </button>
 
       {suggestions.length > 0 && (
-        <ul className="absolute mt-2 w-full bg-white border border-gray-200 rounded-md shadow-md z-10">
+        <ul className="absolute mt-2 w-full bg-white border border-gray-200 rounded-md shadow-md z-10 text-black">
           {suggestions.map((region, idx) => (
             <li
               key={region}
               onClick={() => handleSuggestionClick(region)}
               className={
-                "px-4 py-2 cursor-pointer hover:bg-gray-100 " +
+                "px-4 py-2 text-black cursor-pointer hover:bg-gray-100 " +
                 (idx === activeIndex ? "bg-gray-200" : "")
               }
             >

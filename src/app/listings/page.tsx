@@ -116,7 +116,7 @@ export default async function ListingsPage(props: ListingsPageProps) {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* 헤더 섹션 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-3">🔥청약 모집공고🔥</h1>
+          <h1 className="text-3xl text-black font-bold mb-3">🔥청약 모집공고🔥</h1>
           <p className="text-gray-600 font-medium">전국의 청약 모집 공고를 확인해보세요 🤫</p>
         </div>
 
@@ -173,13 +173,13 @@ export default async function ListingsPage(props: ListingsPageProps) {
                       </span>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-xl text-black font-semibold mb-4 group-hover:text-blue-600 transition-colors">
                         {displayTitle}
                       </h3>
                       <div className="space-y-2">
                         <p className="text-gray-600 flex items-center gap-2">
                           <Ruler className="w-4 h-4 text-gray-400" />
-                          <span className="font-semibold text-sm">넓이:</span>
+                          <span className="font-semibold text-sm">평수/면적:</span>
                           {formatSizeKR(listing.exclusive_area_pyeong)} ({listing.exclusive_area_m2}m²)
                         </p>
                         <p className="text-gray-600 flex items-center gap-2">
