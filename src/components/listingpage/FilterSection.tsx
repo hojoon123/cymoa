@@ -160,12 +160,6 @@ export default function FilterSection() {
     ? [...mainRegions, ...additionalRegions]
     : mainRegions
 
-  // 키 입력 방지를 위한 공통 핸들러
-  const preventInvalidKeys = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (["-", "e", "+", "."].includes(e.key)) {
-      e.preventDefault();
-    }
-  }
 
   return ( // bg-gray-50 p-6 rounded-lg shadow-md
     <div className="p-4 bg-transparent md:p-6 md:rounded-lg md:shadow-md md:bg-gray-50">
