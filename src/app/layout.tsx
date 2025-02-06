@@ -1,3 +1,4 @@
+import KakaoScriptLoader from '@/components/unit-detail/KakaoScriptLoader';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
+        <KakaoScriptLoader />
         <header className="bg-white shadow-sm">
           <nav className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="flex items-center gap-2 group">

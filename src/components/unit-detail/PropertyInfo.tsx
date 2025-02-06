@@ -1,3 +1,4 @@
+// src/components/unit-detail/PropertyInfo.tsx
 'use client';
 
 import {
@@ -7,8 +8,6 @@ import {
   MapPinIcon,
   UsersIcon,
 } from 'lucide-react';
-import Script from 'next/script';
-import { useEffect } from 'react';
 
 export interface KakaoType {
   isInitialized: () => boolean;
@@ -16,12 +15,6 @@ export interface KakaoType {
   Channel: {
     addChannel: (options: { channelPublicId: string }) => void;
   };
-}
-
-declare global {
-  interface Window {
-    Kakao?: KakaoType;
-  }
 }
 
 
@@ -47,14 +40,16 @@ const InfoItem = ({ icon: Icon, label, value }: InfoItemProps) => (
       <Icon className="w-4 h-4 text-gray-900" />
     </div>
     <div className="min-w-0">
-      <p className="text-base md:text-base font-medium text-gray-500 mb-0.5">{label}</p>
+      <p className="text-base md:text-base font-medium text-gray-500 mb-0.5">
+        {label}
+      </p>
       <p className="text-lg md:text-lg text-gray-900 break-words">{value}</p>
     </div>
   </div>
 );
 
 export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
-  // '기타'를 '공고 확인 필요'로 변경하고 중복 제거
+  // '기타'를 '공고 확인 필요'로 변경 후 중복 제거
   const processedResidents = unitInfo.residents.map((resident) =>
     resident === '기타' ? '공고 확인 필요' : resident
   );
@@ -74,32 +69,24 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
     { icon: BuildingIcon, label: '공급 유형', value: unitInfo.type },
   ];
 
-  // Kakao SDK 초기화
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.Kakao) {
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY!);
-      }
-    }
-  }, []);
-
   const handleKakaoPlusFriend = () => {
-    if (typeof window !== 'undefined' && window.Kakao) {
+    if (
+      window.Kakao &&
+      window.Kakao.Channel &&
+      window.Kakao.Channel.addChannel
+    ) {
       window.Kakao.Channel.addChannel({
         channelPublicId: '_HKFKn',
       });
     } else {
-      console.error('Kakao SDK가 로드되지 않았습니다.');
+      console.error(
+        'Kakao SDK가 로드되지 않았거나, 채널 기능이 지원되지 않습니다.'
+      );
     }
   };
 
   return (
     <section className="space-y-4">
-      <Script
-        src="https://developers.kakao.com/sdk/js/kakao.min.js"
-        strategy="afterInteractive"
-      />
-
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-lg bg-blue-50">
           <BuildingIcon className="w-6 h-6 text-blue-600" />

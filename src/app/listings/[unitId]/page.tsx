@@ -35,9 +35,17 @@ export default function UnitDetailPage({ params }: UnitDetailPageProps) {
     type: data.house_types,
   };
 
+  // 공유 URL (실제 서비스 URL로 대체)
+  const shareUrl = `https://www.cybs2025.co.kr/listings/${unitId}`;
+
   return (
     <div className="min-h-screen bg-white">
-      <Header title={data.complex_name} type={data.house_types} region={data.region} />
+      <Header
+        title={data.complex_name}
+        type={data.house_types}
+        region={data.region}
+        shareUrl={shareUrl}
+      />
 
       <main className="max-w-[1728px] mx-auto px-5 py-8 lg:px-16">
         <div className="grid lg:grid-cols-[1fr_400px] gap-16 xl:gap-24">

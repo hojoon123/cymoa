@@ -51,7 +51,7 @@ export function ScheduleInfo({ schedule }: ScheduleInfoProps) {
             <h3 className="flex items-center gap-2 text-base font-medium text-gray-500">
               {item.label}
             </h3>
-            <p className="text-xl md:text-lg text-gray-900">
+            <p className="text-xl font-semibold md:text-lg text-gray-900">
               {item.value}
             </p>
           </div>

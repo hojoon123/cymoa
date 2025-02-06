@@ -16,7 +16,7 @@ const Slider = React.forwardRef<
   >
     {/* 베이스 트랙 */}
     <SliderPrimitive.Track 
-      className="relative h-3 w-full grow overflow-hidden rounded-full bg-gray-200"
+      className="relative h-4 w-full grow overflow-hidden rounded-full bg-gray-200"
     >
       {/* 선택된 범위 */}
       <SliderPrimitive.Range className="absolute h-full bg-blue-500" />

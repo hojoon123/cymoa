@@ -24,7 +24,7 @@ export default function HomePage() {
             alt="청약 로고"
             width={240}
             height={240}
-            className="object-contain max-w-[240px] w-auto h-auto sm:max-w-[200px] md:max-w-[240px] -translate-x-1 -translate-y-8"
+            className="object-contain max-w-[200px] w-auto h-auto sm:max-w-[200px] md:max-w-[240px] -translate-x-1 -translate-y-8"
           />
           </div>
 

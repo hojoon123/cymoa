@@ -39,7 +39,7 @@ export default function ReceptionInfo({ info }: ReceptionInfoProps) {
             <Building2 className="w-3.5 h-3.5" />
             접수처 위치
           </h3>
-          <p className="text-xl md:text-lg text-gray-900 pl-5 break-words">
+          <p className="text-lg font-semibold md:text-lg text-gray-900 pl-5 break-words">
             {info.address}
           </p>
         </div>
@@ -50,7 +50,7 @@ export default function ReceptionInfo({ info }: ReceptionInfoProps) {
               <Calendar className="w-3.5 h-3.5" />
               운영 기간
             </h3>
-            <p className="text-xl md:text-lg text-gray-900 pl-5">
+            <p className="text-xl font-semibold md:text-lg text-gray-900 pl-5">
               {operatingPeriodText}
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function ReceptionInfo({ info }: ReceptionInfoProps) {
               <Phone className="w-3.5 h-3.5" />
               문의 전화
             </h3>
-            <p className="text-xl md:text-lg text-gray-900 pl-5">
+            <p className="text-xl font-semibold md:text-lg text-gray-900 pl-5">
               {info.phone_number}
             </p>
           </div>

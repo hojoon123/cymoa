@@ -215,10 +215,6 @@ export default function FilterSection() {
             <Package2 className="w-4 h-4 text-blue-500" /> 보증금 (만원)
           </h3>
           <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex justify-between mb-2 text-sm font-medium text-gray-600">
-              <span>{deposit[0].toLocaleString()}만원</span>
-              <span>{deposit[1].toLocaleString()}만원</span>
-            </div>
             <div className="px-1 py-2 md:py-6">
               <Slider
                 className="h-2"
@@ -230,6 +226,10 @@ export default function FilterSection() {
                 onValueChange={(value: [number, number]) => setDeposit(value)}
               />
             </div>
+            <div className="flex justify-between mt-2 text-sm font-medium text-gray-600">
+              <span>{deposit[0].toLocaleString()}만원</span>
+              <span>{deposit[1].toLocaleString()}만원</span>
+            </div>
           </div>
         </div>
 
@@ -239,10 +239,6 @@ export default function FilterSection() {
             <ArrowUpDown className="w-4 h-4 text-blue-500" /> 월세 (만원)
           </h3>
           <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex justify-between mb-2 text-sm font-medium text-gray-600">
-              <span>{rent[0].toLocaleString()}만원</span>
-              <span>{rent[1].toLocaleString()}만원</span>
-            </div>
             <div className="px-1 py-2 md:py-6">
               <Slider
                 min={0}
@@ -252,6 +248,10 @@ export default function FilterSection() {
                 defaultValue={[0, 100]}
                 onValueChange={(value: [number, number]) => setRent(value)}
               />
+            </div>
+            <div className="flex justify-between mt-2 text-sm font-medium text-gray-600">
+              <span>{rent[0].toLocaleString()}만원</span>
+              <span>{rent[1].toLocaleString()}만원</span>
             </div>
           </div>
         </div>
