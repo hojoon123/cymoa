@@ -1,4 +1,5 @@
 import KakaoScriptLoader from '@/components/unit-detail/KakaoScriptLoader';
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
@@ -7,8 +8,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: '청약백서 - 청년과 신혼부부를 위한 맞춤형 청약 정보',
-  description: '청년과 신혼부부를 위한 맞춤형 청약 정보 플랫폼',
+  title: '청약백서 - 국민을 위한 맞춤형 청약 정보 플랫폼',
+  description: '국민을 위한 맞춤형 청약 정보 플랫폼',
 };
 
 export default function RootLayout({
@@ -19,7 +20,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <KakaoScriptLoader />
         <header className="bg-white shadow-sm">
           <nav className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="flex items-center gap-2 group">
@@ -45,6 +45,8 @@ export default function RootLayout({
             <p>&copy; 2025 청약백서. All rights reserved.</p>
           </div>
         </footer>
+        <Analytics />
+        <KakaoScriptLoader />
       </body>
     </html>
   );

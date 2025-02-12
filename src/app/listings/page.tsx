@@ -14,8 +14,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '청약 모집공고 - SSR 단일 조회 예시',
-  description: '서버 사이드 페이지네이션 & 한 번에 조회하기 버튼'
+  title: '청약 임대모집공고 - 국민을 위한 맞춤형 청약 정보 플랫폼',
+  description: '임대형 주택 청약에 대한 모집 공고를 확인해보세요.'
 }
 
 type CustomSearchParams = {

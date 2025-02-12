@@ -4,8 +4,8 @@ import InputBar from '@/components/mainpage/InputBar';
 import Image from 'next/image';
 
 export const metadata = {
-  title: '청약에대한모든것 - 메인',
-  description: '청약에대한모든것 메인 페이지. 원하는 지역의 청약에 관한 공고를 쉽게 찾아보세요.'
+  title: '청약에대한모든것 - 청약백서',
+  description: '청약에대한모든것. 원하는 지역의 청약에 관한 공고를 쉽게 찾아보세요.'
   // etc... SSR SEO 메타 설정
 }
 
