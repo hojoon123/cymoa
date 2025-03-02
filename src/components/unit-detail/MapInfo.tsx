@@ -28,7 +28,6 @@ export default function RoadviewWithMiniMap({ info }: RoadviewWithMiniMapProps) 
     useEffect(() => {
         if (loading || error) return;
         if (!info) return; // 주소가 없을 경우 처리
-        console.log('주소 변경:', info);
 
         const geocoder = new kakao.maps.services.Geocoder();
         geocoder.addressSearch(info, (result, status) => {
