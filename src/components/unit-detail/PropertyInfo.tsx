@@ -57,6 +57,7 @@ export default function PropertyInfo({ unitInfo }: PropertyInfoProps) {
   const uniqueResidents = Array.from(new Set(processedResidents));
 
   const infoItems = [
+    { icon: HomeIcon, label: '아파트명', value: unitInfo.location },
     { icon: HomeIcon, label: '전용면적', value: unitInfo.area },
     {
       icon: UsersIcon,
