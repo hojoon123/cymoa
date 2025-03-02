@@ -2,6 +2,7 @@
 
 import Header from '@/components/unit-detail/Header';
 // import ImageGallery from '@/components/unit-detail/ImageGallery';
+import RoadviewWithMiniMap from '@/components/unit-detail/MapInfo';
 import PropertyInfo from '@/components/unit-detail/PropertyInfo';
 import ReceptionInfo from '@/components/unit-detail/ReceptionInfo';
 import RentalOptions from '@/components/unit-detail/RentalOptions';
@@ -92,6 +93,7 @@ export default function UnitDetailPage({ params }: UnitDetailPageProps) {
         <div className="grid lg:grid-cols-[1fr_400px] gap-16 xl:gap-24">
           {/* 왼쪽 컬럼 */}
           <div className="space-y-16">
+            <RoadviewWithMiniMap info={data.reception_info} />
             {/* <ImageGallery orderedImages={data.house_images_ordered} /> */}
 
             {/* 모바일 전용 정보 */}
