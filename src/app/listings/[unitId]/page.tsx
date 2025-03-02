@@ -69,7 +69,7 @@ export default function UnitDetailPage({ params }: UnitDetailPageProps) {
 
     // 주택정보
     const unitInfo = {
-      location : data.region,
+      location : data.location,
       area: `${formatSizeKR(data.exclusive_area_pyeong)} (${data.exclusive_area_m2}m²)`,
       residents: data.eligible_residents,
       period: data.default_residence_period,
@@ -93,7 +93,7 @@ export default function UnitDetailPage({ params }: UnitDetailPageProps) {
         <div className="grid lg:grid-cols-[1fr_400px] gap-16 xl:gap-24">
           {/* 왼쪽 컬럼 */}
           <div className="space-y-16">
-            <RoadviewWithMiniMap info={data.reception_info} />
+            <RoadviewWithMiniMap info={data.location} />
             {/* <ImageGallery orderedImages={data.house_images_ordered} /> */}
 
             {/* 모바일 전용 정보 */}

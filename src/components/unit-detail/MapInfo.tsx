@@ -1,15 +1,12 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Roadview, Map, MapMarker } from 'react-kakao-maps-sdk';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Map, MapMarker, Roadview } from 'react-kakao-maps-sdk';
 import useKakaoLoader from './useKakaoLoader';
 
-interface ReceptionInfoData {
-    address: string;
-}
 
 interface RoadviewWithMiniMapProps {
-    info: ReceptionInfoData; // 부모 컴포넌트에서 받을 주소 prop
+    info: string; // 부모 컴포넌트에서 받을 주소 prop
 }
 
 export default function RoadviewWithMiniMap({ info }: RoadviewWithMiniMapProps) {
@@ -30,10 +27,11 @@ export default function RoadviewWithMiniMap({ info }: RoadviewWithMiniMapProps) 
 
     useEffect(() => {
         if (loading || error) return;
-        if (!info.address) return; // 주소가 없을 경우 처리
+        if (!info) return; // 주소가 없을 경우 처리
+        console.log('주소 변경:', info);
 
         const geocoder = new kakao.maps.services.Geocoder();
-        geocoder.addressSearch(info.address, (result, status) => {
+        geocoder.addressSearch(info, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
                 const newLocation = result[0];
                 setLocation({
@@ -44,7 +42,7 @@ export default function RoadviewWithMiniMap({ info }: RoadviewWithMiniMapProps) 
                 console.log('주소를 찾을 수 없습니다.');
             }
         });
-    }, [loading, error, info.address]); // address가 변경될 때마다 실행
+    }, [loading, error, info]); // address가 변경될 때마다 실행
 
     const handleRoadviewPositionChanged = useCallback((roadview: kakao.maps.Roadview) => {
         const latLng = roadview.getPosition();
