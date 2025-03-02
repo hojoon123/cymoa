@@ -37,6 +37,7 @@ export async function generateMetadata({ params }: UnitDetailPageProps): Promise
 
   const {
     complex_name,
+    location,
     eligible_residents,
     exclusive_area_m2,
     region,
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: UnitDetailPageProps): Promise
 
   return {
     title: `${complex_name} - 청약 임대모집공고`,
-    description: `${complex_name} 임대모집공고 안내. 입주대상자: ${eligible_residents}, 전용면적: ${exclusive_area_m2}m², 접수처: ${officeAddress}, 위치: ${region}.`,
+    description: `${complex_name} 임대모집공고 안내. 입주대상자: ${eligible_residents}, 전용면적: ${exclusive_area_m2}m², 접수처: ${officeAddress}, 위치: ${region}. 아파트 주소 : ${location}`,
   };
 }
 
@@ -71,6 +72,7 @@ export default function UnitDetailPage({ params }: UnitDetailPageProps) {
 
   // 주택정보
   const unitInfo = {
+    location : data.region,
     area: `${formatSizeKR(data.exclusive_area_pyeong)} (${data.exclusive_area_m2}m²)`,
     residents: data.eligible_residents,
     period: data.default_residence_period,

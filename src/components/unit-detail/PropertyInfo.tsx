@@ -20,6 +20,7 @@ export interface KakaoType {
 
 interface PropertyInfoProps {
   unitInfo: {
+    location: string;           // ex) "서울특별시 강남구 은마아파트"
     area: string;             // ex) "21.39m² (6.5평)"
     residents: string[];      // ex) ["대학생", "청년", ...]
     period: number;           // ex) 2
